@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Bus } from "lucide-react";
+import Hero from "@/components/Hero";
 import RouteSelection from "@/components/RouteSelection";
 import SeatSelection from "@/components/SeatSelection";
 import BookingConfirmation from "@/components/BookingConfirmation";
@@ -30,9 +31,13 @@ export type Booking = {
 };
 
 const Index = () => {
-  const [step, setStep] = useState<"route" | "seat" | "confirmation">("route");
+  const [step, setStep] = useState<"home" | "route" | "seat" | "confirmation">("home");
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [booking, setBooking] = useState<Booking | null>(null);
+
+  const handleGetStarted = () => {
+    setStep("route");
+  };
 
   const handleRouteSelect = (route: Route) => {
     setSelectedRoute(route);
@@ -71,7 +76,7 @@ const Index = () => {
   const handleNewBooking = () => {
     setSelectedRoute(null);
     setBooking(null);
-    setStep("route");
+    setStep("home");
   };
 
   return (
@@ -99,7 +104,8 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className={step === "home" ? "py-0" : "container mx-auto px-4 py-8"}>
+        {step === "home" && <Hero onGetStarted={handleGetStarted} />}
         {step === "route" && <RouteSelection onRouteSelect={handleRouteSelect} />}
         {step === "seat" && selectedRoute && (
           <SeatSelection
