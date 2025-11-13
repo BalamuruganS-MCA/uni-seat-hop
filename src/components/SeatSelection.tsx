@@ -24,6 +24,7 @@ interface SeatSelectionProps {
   onBack: () => void;
 }
 
+
 const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [passengerName, setPassengerName] = useState("");
@@ -66,8 +67,6 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
     }
     onConfirm(selectedSeats, passengerName, userType, userId, boardingPoint, phoneNumber, email);
   };
-
-  const totalPrice = selectedSeats.length * route.price;
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -219,19 +218,10 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
 
             <div className="space-y-3 mb-6 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-lg border">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Seat(s):</span>
+                <span className="text-muted-foreground font-medium">Selected Seat(s):</span>
                 <span className="font-bold text-foreground">
                   {selectedSeats.length > 0 ? selectedSeats.join(", ") : "None"}
                 </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground font-medium">Base Fare:</span>
-                <span className="font-semibold text-foreground">${route.price} × {selectedSeats.length}</span>
-              </div>
-              <div className="h-px bg-border my-2"></div>
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-foreground text-lg">Total Amount:</span>
-                <span className="text-3xl font-bold text-primary">${totalPrice}</span>
               </div>
             </div>
 
