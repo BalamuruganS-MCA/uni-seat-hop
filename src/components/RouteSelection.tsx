@@ -115,6 +115,18 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
     return matchesFrom && matchesTo;
   });
 
+  // Group routes by bus ID
+  const groupedRoutes = filteredRoutes.reduce((acc, route) => {
+    const key = `${route.id}-${route.to}-${route.time.split(' ')[1]}`; // Group by ID, destination, and AM/PM
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(route);
+    return acc;
+  }, {} as Record<string, Route[]>);
+
+  const routeGroups = Object.values(groupedRoutes);
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Search Section */}
@@ -156,14 +168,15 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
       {/* Results Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-foreground mb-1">
-          {filteredRoutes.length} Buses Found
+          {routeGroups.length} Buses Found
         </h2>
         <p className="text-muted-foreground">Choose your preferred bus</p>
       </div>
 
       {/* Bus Routes */}
       <div className="grid gap-4">
-        {filteredRoutes.map((route) => {
+        {routeGroups.map((routeGroup) => {
+          const route = routeGroup[0]; // Primary route for display
           const availabilityPercentage = (route.availableSeats / route.totalSeats) * 100;
           const isLowAvailability = availabilityPercentage < 30;
 
@@ -220,7 +233,26 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                       )}
                     </div>
                     
-                    {route.stops && route.stops.length > 0 && (
+                    {routeGroup.length > 1 && (
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium text-foreground">
+                          Boarding Points (Select below):
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {routeGroup.map((r) => (
+                            <Badge 
+                              key={`${r.id}-${r.from}-${r.time}`} 
+                              variant="outline" 
+                              className="text-xs"
+                            >
+                              {r.from} • {r.time}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {route.stops && route.stops.length > 0 && routeGroup.length === 1 && (
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Clock className="h-3.5 w-3.5" />
                         <span className="font-medium">Via:</span>
@@ -237,21 +269,37 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                     <div className="text-3xl font-bold text-primary">${route.price}</div>
                     <div className="text-xs text-muted-foreground">per seat</div>
                   </div>
-                  <Button
-                    onClick={() => onRouteSelect(route)}
-                    disabled={route.availableSeats === 0}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md"
-                    size="lg"
-                  >
-                    {route.availableSeats === 0 ? "Sold Out" : "View Seats"}
-                  </Button>
+                  {routeGroup.length > 1 ? (
+                    <div className="space-y-2 w-full">
+                      {routeGroup.map((r) => (
+                        <Button
+                          key={`${r.id}-${r.from}-${r.time}`}
+                          onClick={() => onRouteSelect(r)}
+                          disabled={r.availableSeats === 0}
+                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md text-xs"
+                          size="sm"
+                        >
+                          {r.from} • {r.time} • ${r.price}
+                        </Button>
+                      ))}
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={() => onRouteSelect(route)}
+                      disabled={route.availableSeats === 0}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md"
+                      size="lg"
+                    >
+                      {route.availableSeats === 0 ? "Sold Out" : "View Seats"}
+                    </Button>
+                  )}
                 </div>
               </div>
             </Card>
           );
         })}
         
-        {filteredRoutes.length === 0 && (
+        {routeGroups.length === 0 && (
           <Card className="p-12 text-center">
             <p className="text-muted-foreground">No buses found matching your search criteria</p>
           </Card>
