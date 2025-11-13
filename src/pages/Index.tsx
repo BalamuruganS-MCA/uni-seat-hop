@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bus } from "lucide-react";
+import logo from "@/assets/takshashila-logo.png";
 import Hero from "@/components/Hero";
 import RouteSelection from "@/components/RouteSelection";
 import SeatSelection from "@/components/SeatSelection";
@@ -86,8 +86,8 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-primary via-destructive to-primary p-2.5 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                <Bus className="h-7 w-7 text-white" />
+              <div className="rounded-xl bg-white p-2 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+                <img src={logo} alt="Takshashila University" className="h-10 w-10 object-contain" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-destructive to-primary bg-clip-text text-transparent drop-shadow-md">
