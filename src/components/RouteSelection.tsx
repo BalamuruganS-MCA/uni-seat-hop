@@ -241,17 +241,26 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
     return matchesFrom && matchesTo;
   });
 
-  // Group routes by bus ID
-  const groupedRoutes = filteredRoutes.reduce((acc, route) => {
-    const key = `${route.id}-${route.to}-${route.time.split(' ')[1]}`; // Group by ID, destination, and AM/PM
+  // Group routes by bus ID and destination to show as recommendations
+  const routeRecommendations = filteredRoutes.reduce((acc, route) => {
+    const key = `${route.id}-${route.to}`;
     if (!acc[key]) {
-      acc[key] = [];
+      acc[key] = {
+        busId: route.id,
+        destination: route.to,
+        routes: [],
+        image: route.image,
+      };
     }
-    acc[key].push(route);
+    acc[key].routes.push(route);
     return acc;
-  }, {} as Record<string, Route[]>);
+  }, {} as Record<string, { busId: string; destination: string; routes: Route[]; image?: string }>);
 
-  const routeGroups = Object.values(groupedRoutes);
+  // Convert to array and sort routes within each recommendation
+  const recommendations = Object.values(routeRecommendations).map(rec => ({
+    ...rec,
+    routes: rec.routes.sort((a, b) => a.time.localeCompare(b.time)),
+  }));
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -307,27 +316,31 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
       {/* Results Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-foreground mb-1">
-          {routeGroups.length} Buses Found
+          {recommendations.length} {recommendations.length === 1 ? 'Bus' : 'Buses'} Available
         </h2>
-        <p className="text-muted-foreground">Choose your preferred bus</p>
+        <p className="text-muted-foreground">Choose your preferred bus and boarding point</p>
       </div>
 
-      {/* Bus Routes */}
+      {/* Bus Recommendations */}
       <div className="grid gap-4">
-        {routeGroups.map((routeGroup) => {
-          const route = routeGroup[0]; // Primary route for display
-          const availabilityPercentage = (route.availableSeats / route.totalSeats) * 100;
+        {recommendations.map((recommendation) => {
+          const firstRoute = recommendation.routes[0]; // Primary route for display
+          const availabilityPercentage = (firstRoute.availableSeats / firstRoute.totalSeats) * 100;
           const isLowAvailability = availabilityPercentage < 30;
+          const allStops = Array.from(new Set(recommendation.routes.flatMap(r => r.stops || [])));
+          const priceRange = recommendation.routes.length > 1 
+            ? `₹${Math.min(...recommendation.routes.map(r => r.price))} - ₹${Math.max(...recommendation.routes.map(r => r.price))}`
+            : `₹${firstRoute.price}`;
 
           return (
-            <Card key={route.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20">
+            <Card key={`${recommendation.busId}-${recommendation.destination}`} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20">
               <div className="flex flex-col md:flex-row">
                 {/* Bus Image (if available) */}
-                {route.image && (
+                {recommendation.image && (
                   <div className="md:w-64 h-48 md:h-auto overflow-hidden bg-muted">
                     <img 
-                      src={route.image} 
-                      alt={`Bus ${route.id}`}
+                      src={recommendation.image} 
+                      alt={`Bus ${recommendation.busId}`}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -336,25 +349,23 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                 {/* Route Info */}
                 <div className="flex-1 p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    {route.image && (
-                      <Badge variant="outline" className="border-primary text-primary font-bold">
-                        Bus #{route.id}
-                      </Badge>
-                    )}
+                    <Badge variant="outline" className="border-primary text-primary font-bold">
+                      Bus #{recommendation.busId}
+                    </Badge>
                     <div className="flex items-center gap-3 flex-1">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-foreground">{route.time.split(' ')[0]}</div>
-                        <div className="text-xs text-muted-foreground">{route.time.split(' ')[1]}</div>
+                        <div className="text-2xl font-bold text-foreground">{firstRoute.time.split(' ')[0]}</div>
+                        <div className="text-xs text-muted-foreground">{firstRoute.time.split(' ')[1]}</div>
                       </div>
                       <ArrowRight className="h-5 w-5 text-muted-foreground" />
                       <div className="flex flex-col">
-                        <span className="font-semibold text-foreground">{route.from}</span>
-                        <span className="text-xs text-muted-foreground">Origin</span>
+                        <span className="font-semibold text-foreground">{recommendation.routes.length} boarding point{recommendation.routes.length > 1 ? 's' : ''}</span>
+                        <span className="text-xs text-muted-foreground">Available</span>
                       </div>
                     </div>
                     <ArrowRight className="h-6 w-6 text-primary" />
                     <div className="flex flex-col items-end">
-                      <span className="font-semibold text-foreground">{route.to}</span>
+                      <span className="font-semibold text-foreground">{recommendation.destination}</span>
                       <span className="text-xs text-muted-foreground">Destination</span>
                     </div>
                   </div>
@@ -363,7 +374,10 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                     <div className="flex flex-wrap items-center gap-4">
                       <Badge variant="secondary" className="flex items-center gap-1.5">
                         <Users className="h-3.5 w-3.5" />
-                        {route.availableSeats} seats left
+                        {firstRoute.availableSeats} seats available
+                      </Badge>
+                      <Badge variant="outline" className="flex items-center gap-1.5">
+                        {priceRange}
                       </Badge>
                       {isLowAvailability && (
                         <Badge variant="destructive" className="animate-pulse">
@@ -372,50 +386,42 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                       )}
                     </div>
                     
-                    
-                    {route.stops && route.stops.length > 0 && routeGroup.length === 1 && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" />
-                        <span className="font-medium">Via:</span>
-                        <span>{route.stops.join(" → ")}</span>
-                      </div>
+                    {allStops.length > 0 && (
+                      <RouteMap 
+                        stops={allStops}
+                        origin={firstRoute.from}
+                        destination={recommendation.destination}
+                      />
                     )}
                   </div>
                 </div>
 
                 {/* Action */}
                 <div className="bg-muted/50 p-6 md:w-64 flex flex-col justify-center items-center border-t md:border-t-0 md:border-l">
-                  {routeGroup.length > 1 ? (
-                    <div className="space-y-2 w-full">
-                      {routeGroup.map((r) => (
-                        <Button
-                          key={`${r.id}-${r.from}-${r.time}`}
-                          onClick={() => onRouteSelect(r)}
-                          disabled={r.availableSeats === 0}
-                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md text-xs"
-                          size="sm"
-                        >
-                          {r.from} • {r.time}
-                        </Button>
-                      ))}
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={() => onRouteSelect(route)}
-                      disabled={route.availableSeats === 0}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md"
-                      size="lg"
-                    >
-                      {route.availableSeats === 0 ? "Sold Out" : "View Seats"}
-                    </Button>
-                  )}
+                  <p className="text-xs text-muted-foreground mb-3 text-center">Select boarding point:</p>
+                  <div className="space-y-2 w-full max-h-64 overflow-y-auto">
+                    {recommendation.routes.map((r) => (
+                      <Button
+                        key={`${r.id}-${r.from}-${r.time}`}
+                        onClick={() => onRouteSelect(r)}
+                        disabled={r.availableSeats === 0}
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md text-xs"
+                        size="sm"
+                      >
+                        <div className="flex flex-col items-start w-full">
+                          <span className="font-bold">{r.from}</span>
+                          <span className="text-[10px] opacity-80">{r.time} • ₹{r.price}</span>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </Card>
           );
         })}
         
-        {routeGroups.length === 0 && (
+        {recommendations.length === 0 && (
           <Card className="p-12 text-center">
             <p className="text-muted-foreground">No buses found matching your search criteria</p>
           </Card>
