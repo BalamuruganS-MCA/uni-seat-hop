@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, MapPin, Clock, Users, CreditCard, User, IdCard } from "lucide-react";
+import { CheckCircle2, MapPin, Clock, Users, CreditCard, User, IdCard, Phone, Mail } from "lucide-react";
 import type { Booking } from "@/pages/Index";
 
 interface BookingConfirmationProps {
@@ -50,6 +50,30 @@ const BookingConfirmation = ({ booking, onNewBooking }: BookingConfirmationProps
                 {booking.userType === "student" ? "Registration Number" : "Employee ID"}
               </div>
               <div className="font-semibold text-foreground">{booking.userId}</div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <Phone className="w-5 h-5 text-primary mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-muted-foreground">Phone Number</div>
+              <div className="font-semibold text-foreground">{booking.phoneNumber}</div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <Mail className="w-5 h-5 text-primary mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-muted-foreground">Email</div>
+              <div className="font-semibold text-foreground">{booking.email}</div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+            <MapPin className="w-5 h-5 text-primary mt-0.5" />
+            <div className="flex-1">
+              <div className="text-sm text-muted-foreground">Boarding Point</div>
+              <div className="font-semibold text-foreground">{booking.boardingPoint}</div>
             </div>
           </div>
 

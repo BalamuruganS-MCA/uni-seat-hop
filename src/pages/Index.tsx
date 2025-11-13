@@ -24,6 +24,9 @@ export type Booking = {
   passengerName: string;
   userType: UserType;
   userId: string;
+  boardingPoint: string;
+  phoneNumber: string;
+  email: string;
 };
 
 const Index = () => {
@@ -36,7 +39,15 @@ const Index = () => {
     setStep("seat");
   };
 
-  const handleSeatConfirm = (seats: string[], passengerName: string, userType: UserType, userId: string) => {
+  const handleSeatConfirm = (
+    seats: string[], 
+    passengerName: string, 
+    userType: UserType, 
+    userId: string,
+    boardingPoint: string,
+    phoneNumber: string,
+    email: string
+  ) => {
     if (selectedRoute) {
       setBooking({
         route: selectedRoute,
@@ -44,6 +55,9 @@ const Index = () => {
         passengerName,
         userType,
         userId,
+        boardingPoint,
+        phoneNumber,
+        email,
       });
       setStep("confirmation");
     }
