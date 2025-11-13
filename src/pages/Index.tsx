@@ -91,7 +91,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-destructive bg-clip-text text-transparent">
-                  UniTransit
+                  TU ridr
                 </h1>
                 <p className="text-xs text-muted-foreground">Book Your Campus Ride</p>
               </div>
