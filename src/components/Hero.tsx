@@ -1,23 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Bus, Clock, Shield, MapPin, ArrowRight, CheckCircle } from "lucide-react";
-
 interface HeroProps {
   onGetStarted: () => void;
 }
-
-const Hero = ({ onGetStarted }: HeroProps) => {
-  return (
-    <div className="space-y-16">
+const Hero = ({
+  onGetStarted
+}: HeroProps) => {
+  return <div className="space-y-16">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-destructive/10 -z-10" />
         <div className="container mx-auto px-4 py-20 md:py-32">
           <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm font-medium text-primary">
-              <CheckCircle className="w-4 h-4" />
-              Trusted by 10,000+ students & staff
-            </div>
+            
             
             <h1 className="text-5xl md:text-7xl font-bold text-foreground leading-tight">
               Your Campus Journey
@@ -31,19 +27,11 @@ const Hero = ({ onGetStarted }: HeroProps) => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Button 
-                onClick={onGetStarted}
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all hover-scale"
-              >
+              <Button onClick={onGetStarted} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all hover-scale">
                 Book Your Seat Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button 
-                variant="outline"
-                size="lg"
-                className="font-semibold text-lg px-8 py-6"
-              >
+              <Button variant="outline" size="lg" className="font-semibold text-lg px-8 py-6">
                 View Schedule
               </Button>
             </div>
@@ -75,7 +63,9 @@ const Hero = ({ onGetStarted }: HeroProps) => {
             </p>
           </Card>
 
-          <Card className="p-8 hover:shadow-xl transition-all hover-scale animate-fade-in border-2" style={{ animationDelay: "100ms" }}>
+          <Card className="p-8 hover:shadow-xl transition-all hover-scale animate-fade-in border-2" style={{
+          animationDelay: "100ms"
+        }}>
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 mx-auto">
               <Shield className="w-8 h-8 text-primary" />
             </div>
@@ -87,7 +77,9 @@ const Hero = ({ onGetStarted }: HeroProps) => {
             </p>
           </Card>
 
-          <Card className="p-8 hover:shadow-xl transition-all hover-scale animate-fade-in border-2" style={{ animationDelay: "200ms" }}>
+          <Card className="p-8 hover:shadow-xl transition-all hover-scale animate-fade-in border-2" style={{
+          animationDelay: "200ms"
+        }}>
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6 mx-auto">
               <MapPin className="w-8 h-8 text-primary" />
             </div>
@@ -109,11 +101,15 @@ const Hero = ({ onGetStarted }: HeroProps) => {
               <div className="text-5xl font-bold">10K+</div>
               <div className="text-lg opacity-90">Happy Travelers</div>
             </div>
-            <div className="space-y-2 animate-fade-in" style={{ animationDelay: "100ms" }}>
+            <div className="space-y-2 animate-fade-in" style={{
+            animationDelay: "100ms"
+          }}>
               <div className="text-5xl font-bold">50+</div>
               <div className="text-lg opacity-90">Daily Routes</div>
             </div>
-            <div className="space-y-2 animate-fade-in" style={{ animationDelay: "200ms" }}>
+            <div className="space-y-2 animate-fade-in" style={{
+            animationDelay: "200ms"
+          }}>
               <div className="text-5xl font-bold">99%</div>
               <div className="text-lg opacity-90">On-Time Rate</div>
             </div>
@@ -130,18 +126,12 @@ const Hero = ({ onGetStarted }: HeroProps) => {
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of students and staff who trust UniTransit for their daily commute
           </p>
-          <Button 
-            onClick={onGetStarted}
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-10 py-6 shadow-lg hover:shadow-xl transition-all hover-scale"
-          >
+          <Button onClick={onGetStarted} size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-10 py-6 shadow-lg hover:shadow-xl transition-all hover-scale">
             Book Your First Ride
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </Card>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Hero;
