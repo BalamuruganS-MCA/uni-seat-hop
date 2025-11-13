@@ -290,13 +290,8 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                   </div>
                 </div>
 
-                {/* Price & Action */}
-                <div className="bg-muted/50 p-6 md:w-64 flex flex-col justify-between items-center border-t md:border-t-0 md:border-l">
-                  <div className="text-center mb-4">
-                    <div className="text-xs text-muted-foreground mb-1">Starts from</div>
-                    <div className="text-3xl font-bold text-primary">${route.price}</div>
-                    <div className="text-xs text-muted-foreground">per seat</div>
-                  </div>
+                {/* Action */}
+                <div className="bg-muted/50 p-6 md:w-64 flex flex-col justify-center items-center border-t md:border-t-0 md:border-l">
                   {routeGroup.length > 1 ? (
                     <div className="space-y-2 w-full">
                       {routeGroup.map((r) => (
@@ -307,7 +302,7 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-md text-xs"
                           size="sm"
                         >
-                          {r.from} • {r.time} • ${r.price}
+                          {r.from} • {r.time}
                         </Button>
                       ))}
                     </div>
