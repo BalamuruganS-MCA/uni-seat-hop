@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -109,6 +109,22 @@ interface RouteSelectionProps {
 const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
   const [searchFrom, setSearchFrom] = useState("");
   const [searchTo, setSearchTo] = useState("");
+  const [isMorning, setIsMorning] = useState(true);
+
+  // Check time and set appropriate default
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    const morning = currentHour < 14; // Before 2 PM is morning
+    setIsMorning(morning);
+    
+    if (morning) {
+      // Morning: destination is Takshashila University
+      setSearchTo("Takshashila University");
+    } else {
+      // Evening: source is Takshashila University
+      setSearchFrom("Takshashila University");
+    }
+  }, []);
 
   const filteredRoutes = routes.filter((route) => {
     const matchesFrom = route.from.toLowerCase().includes(searchFrom.toLowerCase());
@@ -132,28 +148,41 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
     <div className="max-w-6xl mx-auto">
       {/* Search Section */}
       <Card className="p-6 mb-8 bg-gradient-to-r from-primary to-destructive shadow-xl">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold text-white">Book Your Ride</h3>
+          <Badge className="bg-white/20 text-white hover:bg-white/30">
+            <Clock className="h-3 w-3 mr-1" />
+            {isMorning ? "Morning Mode" : "Evening Mode"}
+          </Badge>
+        </div>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">From</label>
+            <label className="text-sm font-medium text-white">
+              From {!isMorning && <span className="text-xs opacity-80">(Auto-set to Takshashila)</span>}
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Enter origin"
+                placeholder={isMorning ? "Enter origin" : "Takshashila University"}
                 value={searchFrom}
                 onChange={(e) => setSearchFrom(e.target.value)}
-                className="pl-10 bg-white"
+                disabled={!isMorning}
+                className="pl-10 bg-white disabled:opacity-70 disabled:cursor-not-allowed"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">To</label>
+            <label className="text-sm font-medium text-white">
+              To {isMorning && <span className="text-xs opacity-80">(Auto-set to Takshashila)</span>}
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Enter destination"
+                placeholder={isMorning ? "Takshashila University" : "Enter destination"}
                 value={searchTo}
                 onChange={(e) => setSearchTo(e.target.value)}
-                className="pl-10 bg-white"
+                disabled={isMorning}
+                className="pl-10 bg-white disabled:opacity-70 disabled:cursor-not-allowed"
               />
             </div>
           </div>
