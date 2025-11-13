@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { MapPin, Clock, Users, Search, ArrowRight } from "lucide-react";
 import type { Route } from "@/pages/Index";
 import bus13Image from "@/assets/bus-13.png";
+import RouteMap from "./RouteMap";
 
 const routes: Route[] = [
   {
@@ -233,7 +234,34 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                       )}
                     </div>
                     
-                    {routeGroup.length > 1 && (
+                    {routeGroup.length > 1 && route.id === "13" && (
+                      <div className="space-y-3">
+                        <div className="text-sm font-medium text-foreground">
+                          Route Map:
+                        </div>
+                        <RouteMap 
+                          origin="Uppuvellore"
+                          destination={route.to}
+                          stops={["Nallalam", "Kattalai", "Housing Board", "Melpettai"]}
+                        />
+                        <div className="text-sm font-medium text-foreground">
+                          Boarding Points (Select below):
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {routeGroup.map((r) => (
+                            <Badge 
+                              key={`${r.id}-${r.from}-${r.time}`} 
+                              variant="outline" 
+                              className="text-xs"
+                            >
+                              {r.from} • {r.time}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {routeGroup.length > 1 && route.id !== "13" && (
                       <div className="space-y-2">
                         <div className="text-sm font-medium text-foreground">
                           Boarding Points (Select below):
