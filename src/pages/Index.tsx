@@ -82,22 +82,24 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-white shadow-md sticky top-0 z-50">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 shadow-2xl sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-primary to-destructive p-2.5 shadow-lg">
+              <div className="rounded-xl bg-gradient-to-br from-primary via-destructive to-primary p-2.5 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
                 <Bus className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-destructive bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-destructive to-primary bg-clip-text text-transparent drop-shadow-md">
                   TU ridr
                 </h1>
-                <p className="text-xs text-muted-foreground">Book Your Campus Ride</p>
+                <p className="text-xs text-muted-foreground font-medium">Book Your Campus Ride</p>
               </div>
             </div>
             <div className="hidden md:flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Safe • Reliable • Affordable</span>
+              <span className="text-muted-foreground font-medium px-4 py-2 rounded-full bg-secondary/30 backdrop-blur-sm shadow-md">
+                Safe • Reliable • Affordable
+              </span>
             </div>
           </div>
         </div>
