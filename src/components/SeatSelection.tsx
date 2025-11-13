@@ -12,7 +12,15 @@ import type { Route, UserType } from "@/pages/Index";
 
 interface SeatSelectionProps {
   route: Route;
-  onConfirm: (seats: string[], passengerName: string, userType: UserType, userId: string) => void;
+  onConfirm: (
+    seats: string[], 
+    passengerName: string, 
+    userType: UserType, 
+    userId: string,
+    boardingPoint: string,
+    phoneNumber: string,
+    email: string
+  ) => void;
   onBack: () => void;
 }
 
@@ -21,6 +29,9 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
   const [passengerName, setPassengerName] = useState("");
   const [userType, setUserType] = useState<UserType>("student");
   const [userId, setUserId] = useState("");
+  const [boardingPoint, setBoardingPoint] = useState(route.from);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleSeatToggle = (seatId: string) => {
     setSelectedSeats((prev) =>
@@ -41,7 +52,19 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
       toast.error(`Please enter your ${userType === "student" ? "registration number" : "employee ID"}`);
       return;
     }
-    onConfirm(selectedSeats, passengerName, userType, userId);
+    if (!phoneNumber.trim()) {
+      toast.error("Please enter your phone number");
+      return;
+    }
+    if (!email.trim()) {
+      toast.error("Please enter your email");
+      return;
+    }
+    if (!boardingPoint) {
+      toast.error("Please select a boarding point");
+      return;
+    }
+    onConfirm(selectedSeats, passengerName, userType, userId, boardingPoint, phoneNumber, email);
   };
 
   const totalPrice = selectedSeats.length * route.price;
@@ -147,6 +170,51 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
                   className="mt-1.5 border-2 focus:border-primary"
                 />
               </div>
+
+              <div>
+                <Label htmlFor="phone" className="text-sm font-semibold">
+                  Phone Number *
+                </Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="Enter phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="mt-1.5 border-2 focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="email" className="text-sm font-semibold">
+                  Email *
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="mt-1.5 border-2 focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="boarding" className="text-sm font-semibold">
+                  Boarding Point *
+                </Label>
+                <select
+                  id="boarding"
+                  value={boardingPoint}
+                  onChange={(e) => setBoardingPoint(e.target.value)}
+                  className="mt-1.5 w-full h-10 px-3 border-2 rounded-md bg-background focus:border-primary focus:outline-none"
+                >
+                  <option value={route.from}>{route.from} - {route.time}</option>
+                  {route.stops && route.stops.map((stop) => (
+                    <option key={stop} value={stop}>{stop}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="space-y-3 mb-6 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-lg border">
@@ -169,7 +237,7 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
 
             <Button
               onClick={handleConfirm}
-              disabled={selectedSeats.length === 0 || !passengerName || !userId}
+              disabled={selectedSeats.length === 0 || !passengerName || !userId || !phoneNumber || !email || !boardingPoint}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg text-base"
               size="lg"
             >
