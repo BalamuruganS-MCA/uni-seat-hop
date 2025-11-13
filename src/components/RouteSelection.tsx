@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MapPin, Clock, Users, Search, ArrowRight } from "lucide-react";
 import type { Route } from "@/pages/Index";
+import bus13Image from "@/assets/bus-13.png";
 
 const routes: Route[] = [
   {
@@ -42,6 +43,16 @@ const routes: Route[] = [
     availableSeats: 8,
     totalSeats: 40,
     price: 5,
+  },
+  {
+    id: "13",
+    from: "Main Campus",
+    to: "Uppuvellore",
+    time: "07:00 AM",
+    availableSeats: 35,
+    totalSeats: 40,
+    price: 5,
+    image: bus13Image,
   },
 ];
 
@@ -114,9 +125,25 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
           return (
             <Card key={route.id} className="overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20">
               <div className="flex flex-col md:flex-row">
+                {/* Bus Image (if available) */}
+                {route.image && (
+                  <div className="md:w-64 h-48 md:h-auto overflow-hidden bg-muted">
+                    <img 
+                      src={route.image} 
+                      alt={`Bus ${route.id}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                
                 {/* Route Info */}
                 <div className="flex-1 p-6">
                   <div className="flex items-center gap-3 mb-4">
+                    {route.image && (
+                      <Badge variant="outline" className="border-primary text-primary font-bold">
+                        Bus #{route.id}
+                      </Badge>
+                    )}
                     <div className="flex items-center gap-3 flex-1">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-foreground">{route.time.split(' ')[0]}</div>

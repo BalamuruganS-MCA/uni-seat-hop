@@ -12,6 +12,7 @@ export type Route = {
   availableSeats: number;
   totalSeats: number;
   price: number;
+  image?: string;
 };
 
 export type Booking = {
