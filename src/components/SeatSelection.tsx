@@ -45,29 +45,31 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
   const totalPrice = selectedSeats.length * route.price;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <Button
         variant="ghost"
         onClick={onBack}
-        className="mb-6 hover:bg-secondary"
+        className="mb-6 hover:bg-secondary text-foreground"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
-        Back to Routes
+        Back to Buses
       </Button>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Seat Map */}
         <div className="lg:col-span-2">
-          <Card className="p-6">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Select Your Seats</h2>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">{route.from}</span>
-                <span>→</span>
-                <span className="font-medium text-foreground">{route.to}</span>
-                <Badge variant="secondary" className="ml-2">
+          <Card className="p-6 shadow-lg">
+            <div className="mb-6 pb-4 border-b">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-2xl font-bold text-foreground">Select Your Seats</h2>
+                <Badge variant="outline" className="text-primary border-primary">
                   {route.time}
                 </Badge>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-semibold text-foreground">{route.from}</span>
+                <ArrowLeft className="h-4 w-4 rotate-180 text-primary" />
+                <span className="font-semibold text-foreground">{route.to}</span>
               </div>
             </div>
 
@@ -79,18 +81,18 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
             />
 
             {/* Legend */}
-            <div className="flex flex-wrap items-center gap-4 mt-6 pt-6 border-t border-border">
+            <div className="flex flex-wrap items-center gap-6 mt-6 pt-6 border-t border-border">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-success border-2 border-success"></div>
-                <span className="text-sm text-muted-foreground">Available</span>
+                <div className="w-10 h-10 rounded-md bg-success border-2 border-success"></div>
+                <span className="text-sm font-medium text-foreground">Available</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-accent border-2 border-accent"></div>
-                <span className="text-sm text-muted-foreground">Selected</span>
+                <div className="w-10 h-10 rounded-md bg-primary border-2 border-primary"></div>
+                <span className="text-sm font-medium text-foreground">Selected</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-seat-booked border-2 border-seat-booked opacity-50"></div>
-                <span className="text-sm text-muted-foreground">Booked</span>
+                <div className="w-10 h-10 rounded-md bg-muted border-2 border-border opacity-50"></div>
+                <span className="text-sm font-medium text-foreground">Booked</span>
               </div>
             </div>
           </Card>
@@ -98,63 +100,69 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
 
         {/* Booking Summary */}
         <div className="lg:col-span-1">
-          <Card className="p-6 sticky top-6">
-            <h3 className="text-xl font-bold text-foreground mb-4">Booking Details</h3>
+          <Card className="p-6 sticky top-6 shadow-lg border-2">
+            <h3 className="text-xl font-bold text-foreground mb-6">Passenger Details</h3>
 
             <div className="space-y-4 mb-6">
               <div>
-                <Label htmlFor="name" className="text-sm font-medium">
-                  Full Name
+                <Label htmlFor="name" className="text-sm font-semibold">
+                  Full Name *
                 </Label>
                 <Input
                   id="name"
-                  placeholder="Enter your name"
+                  placeholder="Enter full name"
                   value={passengerName}
                   onChange={(e) => setPassengerName(e.target.value)}
-                  className="mt-1.5"
+                  className="mt-1.5 border-2 focus:border-primary"
                 />
               </div>
 
               <div>
-                <Label htmlFor="studentId" className="text-sm font-medium">
-                  Student ID
+                <Label htmlFor="studentId" className="text-sm font-semibold">
+                  Student ID *
                 </Label>
                 <Input
                   id="studentId"
-                  placeholder="Enter your student ID"
+                  placeholder="Enter student ID"
                   value={studentId}
                   onChange={(e) => setStudentId(e.target.value)}
-                  className="mt-1.5"
+                  className="mt-1.5 border-2 focus:border-primary"
                 />
               </div>
             </div>
 
-            <div className="space-y-3 mb-6 p-4 bg-muted rounded-lg">
+            <div className="space-y-3 mb-6 p-4 bg-gradient-to-br from-muted to-muted/50 rounded-lg border">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Selected Seats:</span>
-                <span className="font-medium text-foreground">
+                <span className="text-muted-foreground font-medium">Seat(s):</span>
+                <span className="font-bold text-foreground">
                   {selectedSeats.length > 0 ? selectedSeats.join(", ") : "None"}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Price per seat:</span>
-                <span className="font-medium text-foreground">${route.price}</span>
+                <span className="text-muted-foreground font-medium">Base Fare:</span>
+                <span className="font-semibold text-foreground">${route.price} × {selectedSeats.length}</span>
               </div>
               <div className="h-px bg-border my-2"></div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-foreground">Total:</span>
-                <span className="text-2xl font-bold text-primary">${totalPrice}</span>
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-foreground text-lg">Total Amount:</span>
+                <span className="text-3xl font-bold text-primary">${totalPrice}</span>
               </div>
             </div>
 
             <Button
               onClick={handleConfirm}
               disabled={selectedSeats.length === 0 || !passengerName || !studentId}
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg text-base"
               size="lg"
             >
-              Confirm Booking
+              Proceed to Book
             </Button>
+            
+            {selectedSeats.length === 0 && (
+              <p className="text-xs text-muted-foreground text-center mt-3">
+                Please select at least one seat
+              </p>
+            )}
           </Card>
         </div>
       </div>
