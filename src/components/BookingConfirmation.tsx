@@ -46,8 +46,10 @@ const BookingConfirmation = ({ booking, onNewBooking }: BookingConfirmationProps
           <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
             <IdCard className="w-5 h-5 text-primary mt-0.5" />
             <div className="flex-1">
-              <div className="text-sm text-muted-foreground">Student ID</div>
-              <div className="font-semibold text-foreground">{booking.studentId}</div>
+              <div className="text-sm text-muted-foreground">
+                {booking.userType === "student" ? "Registration Number" : "Employee ID"}
+              </div>
+              <div className="font-semibold text-foreground">{booking.userId}</div>
             </div>
           </div>
 

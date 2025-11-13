@@ -4,21 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, User } from "lucide-react";
 import { toast } from "sonner";
 import SeatMap from "@/components/SeatMap";
-import type { Route } from "@/pages/Index";
+import type { Route, UserType } from "@/pages/Index";
 
 interface SeatSelectionProps {
   route: Route;
-  onConfirm: (seats: string[], passengerName: string, studentId: string) => void;
+  onConfirm: (seats: string[], passengerName: string, userType: UserType, userId: string) => void;
   onBack: () => void;
 }
 
 const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [passengerName, setPassengerName] = useState("");
-  const [studentId, setStudentId] = useState("");
+  const [userType, setUserType] = useState<UserType>("student");
+  const [userId, setUserId] = useState("");
 
   const handleSeatToggle = (seatId: string) => {
     setSelectedSeats((prev) =>
@@ -35,11 +37,11 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
       toast.error("Please enter your name");
       return;
     }
-    if (!studentId.trim()) {
-      toast.error("Please enter your student ID");
+    if (!userId.trim()) {
+      toast.error(`Please enter your ${userType === "student" ? "registration number" : "employee ID"}`);
       return;
     }
-    onConfirm(selectedSeats, passengerName, studentId);
+    onConfirm(selectedSeats, passengerName, userType, userId);
   };
 
   const totalPrice = selectedSeats.length * route.price;
@@ -105,6 +107,22 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
 
             <div className="space-y-4 mb-6">
               <div>
+                <Label className="text-sm font-semibold mb-3 block">
+                  User Type *
+                </Label>
+                <RadioGroup value={userType} onValueChange={(value) => setUserType(value as UserType)}>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <RadioGroupItem value="student" id="student" />
+                    <Label htmlFor="student" className="font-normal cursor-pointer">Student</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="staff" id="staff" />
+                    <Label htmlFor="staff" className="font-normal cursor-pointer">Staff</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div>
                 <Label htmlFor="name" className="text-sm font-semibold">
                   Full Name *
                 </Label>
@@ -118,14 +136,14 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
               </div>
 
               <div>
-                <Label htmlFor="studentId" className="text-sm font-semibold">
-                  Student ID *
+                <Label htmlFor="userId" className="text-sm font-semibold">
+                  {userType === "student" ? "Registration Number" : "Employee ID"} *
                 </Label>
                 <Input
-                  id="studentId"
-                  placeholder="Enter student ID"
-                  value={studentId}
-                  onChange={(e) => setStudentId(e.target.value)}
+                  id="userId"
+                  placeholder={userType === "student" ? "Enter registration number" : "Enter employee ID"}
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
                   className="mt-1.5 border-2 focus:border-primary"
                 />
               </div>
@@ -151,7 +169,7 @@ const SeatSelection = ({ route, onConfirm, onBack }: SeatSelectionProps) => {
 
             <Button
               onClick={handleConfirm}
-              disabled={selectedSeats.length === 0 || !passengerName || !studentId}
+              disabled={selectedSeats.length === 0 || !passengerName || !userId}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg text-base"
               size="lg"
             >

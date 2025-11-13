@@ -15,11 +15,14 @@ export type Route = {
   image?: string;
 };
 
+export type UserType = "student" | "staff";
+
 export type Booking = {
   route: Route;
   selectedSeats: string[];
   passengerName: string;
-  studentId: string;
+  userType: UserType;
+  userId: string;
 };
 
 const Index = () => {
@@ -32,13 +35,14 @@ const Index = () => {
     setStep("seat");
   };
 
-  const handleSeatConfirm = (seats: string[], passengerName: string, studentId: string) => {
+  const handleSeatConfirm = (seats: string[], passengerName: string, userType: UserType, userId: string) => {
     if (selectedRoute) {
       setBooking({
         route: selectedRoute,
         selectedSeats: seats,
         passengerName,
-        studentId,
+        userType,
+        userId,
       });
       setStep("confirmation");
     }

@@ -10,8 +10,8 @@ import bus13Image from "@/assets/bus-13.png";
 const routes: Route[] = [
   {
     id: "1",
-    from: "Main Campus",
-    to: "North Hall",
+    from: "North Hall",
+    to: "Takshashila University",
     time: "08:00 AM",
     availableSeats: 28,
     totalSeats: 40,
@@ -19,8 +19,8 @@ const routes: Route[] = [
   },
   {
     id: "2",
-    from: "Main Campus",
-    to: "Engineering Block",
+    from: "Engineering Block",
+    to: "Takshashila University",
     time: "09:30 AM",
     availableSeats: 15,
     totalSeats: 40,
@@ -28,8 +28,8 @@ const routes: Route[] = [
   },
   {
     id: "3",
-    from: "North Hall",
-    to: "Main Campus",
+    from: "Takshashila University",
+    to: "North Hall",
     time: "05:00 PM",
     availableSeats: 32,
     totalSeats: 40,
@@ -37,8 +37,8 @@ const routes: Route[] = [
   },
   {
     id: "4",
-    from: "Engineering Block",
-    to: "Main Campus",
+    from: "Takshashila University",
+    to: "Engineering Block",
     time: "06:30 PM",
     availableSeats: 8,
     totalSeats: 40,
@@ -46,8 +46,8 @@ const routes: Route[] = [
   },
   {
     id: "13",
-    from: "Main Campus",
-    to: "Uppuvellore",
+    from: "Uppuvellore",
+    to: "Takshashila University",
     time: "07:00 AM",
     availableSeats: 35,
     totalSeats: 40,
