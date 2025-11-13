@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, MapPin, Clock, Users, CreditCard, User, IdCard, Phone, Mail } from "lucide-react";
+import { CheckCircle2, MapPin, Clock, Users, User, IdCard, Phone, Mail } from "lucide-react";
 import type { Booking } from "@/pages/Index";
 
 interface BookingConfirmationProps {
@@ -10,7 +10,6 @@ interface BookingConfirmationProps {
 }
 
 const BookingConfirmation = ({ booking, onNewBooking }: BookingConfirmationProps) => {
-  const totalPrice = booking.selectedSeats.length * booking.route.price;
   const bookingId = `BK${Date.now().toString().slice(-8)}`;
 
   return (
@@ -109,13 +108,6 @@ const BookingConfirmation = ({ booking, onNewBooking }: BookingConfirmationProps
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-            <CreditCard className="w-5 h-5 text-primary mt-0.5" />
-            <div className="flex-1">
-              <div className="text-sm text-muted-foreground">Total Amount</div>
-              <div className="text-2xl font-bold text-primary">${totalPrice}</div>
-            </div>
-          </div>
         </div>
 
         {/* Important Note */}
