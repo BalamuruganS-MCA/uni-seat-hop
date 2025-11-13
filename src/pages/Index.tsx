@@ -13,6 +13,7 @@ export type Route = {
   totalSeats: number;
   price: number;
   image?: string;
+  stops?: string[];
 };
 
 export type UserType = "student" | "staff";

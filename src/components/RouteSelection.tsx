@@ -53,6 +53,7 @@ const routes: Route[] = [
     totalSeats: 40,
     price: 5,
     image: bus13Image,
+    stops: ["Nallalam", "Kattalai", "Housing Board", "Melpettai"],
   },
 ];
 
@@ -162,15 +163,25 @@ const RouteSelection = ({ onRouteSelect }: RouteSelectionProps) => {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4">
-                    <Badge variant="secondary" className="flex items-center gap-1.5">
-                      <Users className="h-3.5 w-3.5" />
-                      {route.availableSeats} seats left
-                    </Badge>
-                    {isLowAvailability && (
-                      <Badge variant="destructive" className="animate-pulse">
-                        Filling Fast
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-4">
+                      <Badge variant="secondary" className="flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5" />
+                        {route.availableSeats} seats left
                       </Badge>
+                      {isLowAvailability && (
+                        <Badge variant="destructive" className="animate-pulse">
+                          Filling Fast
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    {route.stops && route.stops.length > 0 && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5" />
+                        <span className="font-medium">Via:</span>
+                        <span>{route.stops.join(" → ")}</span>
+                      </div>
                     )}
                   </div>
                 </div>
