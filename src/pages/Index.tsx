@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import logo from "@/assets/takshashila-logo.png";
 import Hero from "@/components/Hero";
 import RouteSelection from "@/components/RouteSelection";
@@ -96,10 +99,18 @@ const Index = () => {
                 <p className="text-xs text-muted-foreground font-medium">Smart Bus Booking & Safety</p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground font-medium px-4 py-2 rounded-full bg-secondary/30 backdrop-blur-sm shadow-md">
-                Safe • Reliable • Affordable
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2 text-sm">
+                <span className="text-muted-foreground font-medium px-4 py-2 rounded-full bg-secondary/30 backdrop-blur-sm shadow-md">
+                  Safe • Reliable • Affordable
+                </span>
+              </div>
+              <Link to="/admin/login">
+                <Button variant="outline" size="sm">
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Admin
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
